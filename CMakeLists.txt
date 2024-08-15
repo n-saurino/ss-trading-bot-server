@@ -6,9 +6,18 @@ set(CMAKE_CXX_STANDARD 20)  # Use C++17, you can change this to 11, 14, 20, etc.
 set(CMAKE_CXX_STANDARD_REQUIRED True)  # Ensure the compiler enforces the standard
 set(CMAKE_CXX_EXTENSIONS OFF)  # Disable compiler-specific extensions
 
+# Set Ninja as the default generator if available
+if(NOT CMAKE_GENERATOR AND "${CMAKE_GENERATOR}" STREQUAL "")
+    if(CMAKE_MAKE_PROGRAM MATCHES "ninja")
+        set(CMAKE_GENERATOR "Ninja" CACHE INTERNAL "" FORCE)
+    endif()
+endif()
+
 # Find Boost
-set(BOOST_ROOT "/opt/homebrew/Cellar/boost/1.85.0")
-find_package(Boost 1.85.0 REQUIRED COMPONENTS system filesystem)
+# set(BOOST_ROOT "/opt/homebrew/Cellar/boost/1.85.0")
+# find_package(Boost 1.85.0 REQUIRED COMPONENTS system filesystem)
+# Require at least Boost 1.71.0, but allow newer versions
+find_package(Boost 1.71.0 REQUIRED)
 
 if(Boost_FOUND)
     message(STATUS "Boost version: ${Boost_VERSION}")
@@ -18,11 +27,14 @@ else()
     message(FATAL_ERROR "Could not find Boost")
 endif()
 
-add_executable(main main.cpp)
+add_executable(main src/main.cpp include/Server.h)
 
 # Include Boost headers
 target_include_directories(main PRIVATE ${Boost_INCLUDE_DIRS})
 
 # Link Boost libraries
 target_link_libraries(main PRIVATE ${Boost_LIBRARIES})
+
+# Link Boost libraries and pthread
+target_link_libraries(main PRIVATE ${Boost_LIBRARIES} pthread)
 

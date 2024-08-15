@@ -1,0 +1,18 @@
+// .devcontainer/devcontainer.json
+
+{
+    "name": "C++ Dev Container",
+    "dockerFile": "Dockerfile",
+    "context": "..",
+    "runArgs": ["--init"],
+    "settings": {
+      "terminal.integrated.shell.linux": "/bin/bash"
+    },
+    "extensions": [
+      "ms-vscode.cpptools",
+      "ms-python.python",
+      "eamodio.gitlens"
+    ],
+    "remoteUser": "devuser",
+    "workspaceFolder": "/workspace"
+  }

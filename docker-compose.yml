@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ./.devcontainer
+      dockerfile: Dockerfile
+    volumes:
+      - .:/workspace
+    ports:
+      - "13:13"  # Example port mapping, adjust as needed
+    networks:
+      - app-network
+    container_name: cpp_app
+    stdin_open: true  # Keep stdin open to support running a shell
+    tty: true         # Allocate a pseudo-TTY for the container
+    command: /bin/bash  # Keeps the container running with an interactive shell
+
+  # Temporarily comment out the Q/KDB+ service
+  # qkdb:
+  #   image: kxsys/qkdb:latest
+  #   environment:
+  #     - KDB_LICENSE_ACCEPTED=yes
+  #   volumes:
+  #     - qdata:/var/lib/qkdb
+  #   networks:
+  #     - app-network
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: tradingdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  qdata:
+  pgdata:
