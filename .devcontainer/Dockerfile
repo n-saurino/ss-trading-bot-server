@@ -15,7 +15,6 @@ RUN apt-get update && apt-get install -y \
     git \
     vim \
     wget \
-    libboost-all-dev \
     libssl-dev \
     libstdc++-9-dev \
     ccache \
@@ -31,7 +30,19 @@ RUN apt-get update && apt-get install -y \
     doxygen \
     autoconf \
     automake \
+    zlib1g-dev \
+    libbz2-dev \
+    liblzma-dev \
     && rm -rf /var/lib/apt/lists/*
+
+# Download and install Boost 1.85.0
+RUN wget https://boostorg.jfrog.io/artifactory/main/release/1.85.0/source/boost_1_85_0.tar.gz && \
+    tar xfz boost_1_85_0.tar.gz && \
+    cd boost_1_85_0 && \
+    ./bootstrap.sh --prefix=/usr/local && \
+    ./b2 install --with=all --without-stacktrace && \
+    cd .. && \
+    rm -rf boost_1_85_0 boost_1_85_0.tar.gz
 
 # Install Google Test
 RUN cd /usr/src/gtest && \

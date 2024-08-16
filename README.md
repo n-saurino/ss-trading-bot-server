@@ -1,4 +1,6 @@
-# C++ Project Template
+# SMA Trading Bot Server
+
+docker-compose up --build
 
 This repository serves as a template for new projects. Click the `Use this template` button above to create a new repository based on this template for your # Project Template
 
