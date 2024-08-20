@@ -18,6 +18,7 @@ endif()
 # find_package(Boost 1.85.0 REQUIRED COMPONENTS system filesystem)
 # Require at least Boost 1.71.0, but allow newer versions
 find_package(Boost 1.71.0 REQUIRED)
+find_package(OpenSSL REQUIRED)
 
 if(Boost_FOUND)
     message(STATUS "Boost version: ${Boost_VERSION}")
@@ -33,8 +34,5 @@ add_executable(main src/main.cpp include/Server.h)
 target_include_directories(main PRIVATE ${Boost_INCLUDE_DIRS})
 
 # Link Boost libraries
-target_link_libraries(main PRIVATE ${Boost_LIBRARIES})
-
-# Link Boost libraries and pthread
-target_link_libraries(main PRIVATE ${Boost_LIBRARIES} pthread)
+target_link_libraries(main PRIVATE ${Boost_LIBRARIES} pthread OpenSSL::SSL OpenSSL::Crypto)
 
