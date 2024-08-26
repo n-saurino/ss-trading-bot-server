@@ -20,6 +20,15 @@ endif()
 find_package(Boost 1.71.0 REQUIRED)
 find_package(OpenSSL REQUIRED)
 
+# Include QuickFIX
+find_library(QUICKFIX_LIB quickfix)
+include_directories(/usr/local/include/quickfix)
+
+# Verify QuickFIX library
+if(NOT QUICKFIX_LIB)
+    message(FATAL_ERROR "Could not find QuickFIX library")
+endif()
+
 if(Boost_FOUND)
     message(STATUS "Boost version: ${Boost_VERSION}")
     message(STATUS "Boost include dirs: ${Boost_INCLUDE_DIRS}")
@@ -30,9 +39,8 @@ endif()
 
 add_executable(main src/main.cpp include/Server.h)
 
-# Include Boost headers
-target_include_directories(main PRIVATE ${Boost_INCLUDE_DIRS})
+# Include directories
+target_include_directories(main PRIVATE ${Boost_INCLUDE_DIRS} /usr/local/include/quickfix)
 
-# Link Boost libraries
-target_link_libraries(main PRIVATE ${Boost_LIBRARIES} pthread OpenSSL::SSL OpenSSL::Crypto)
-
+# Link libraries
+target_link_libraries(main PRIVATE ${Boost_LIBRARIES} ${QUICKFIX_LIB} pthread OpenSSL::SSL OpenSSL::Crypto)

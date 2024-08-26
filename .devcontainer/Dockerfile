@@ -30,10 +30,21 @@ RUN apt-get update && apt-get install -y \
     doxygen \
     autoconf \
     automake \
+    libtool \
     zlib1g-dev \
     libbz2-dev \
     liblzma-dev \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Autoconf 2.71
+RUN wget https://ftp.gnu.org/gnu/autoconf/autoconf-2.71.tar.gz && \
+    tar -xf autoconf-2.71.tar.gz && \
+    cd autoconf-2.71 && \
+    ./configure && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf autoconf-2.71 autoconf-2.71.tar.gz
 
 # Download and install Boost 1.85.0
 RUN wget https://boostorg.jfrog.io/artifactory/main/release/1.85.0/source/boost_1_85_0.tar.gz && \
@@ -43,6 +54,16 @@ RUN wget https://boostorg.jfrog.io/artifactory/main/release/1.85.0/source/boost_
     ./b2 install --with=all --without-stacktrace && \
     cd .. && \
     rm -rf boost_1_85_0 boost_1_85_0.tar.gz
+
+# Download and Install QuickFIX
+RUN git clone https://github.com/quickfix/quickfix.git /quickfix \
+&& cd /quickfix \
+&& touch README \
+&& ./bootstrap \
+&& ./configure \
+&& make \
+&& make install \
+&& ldconfig
 
 # Install Google Test
 RUN cd /usr/src/gtest && \

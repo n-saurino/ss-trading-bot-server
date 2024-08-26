@@ -11,6 +11,13 @@
 #include "../include/Server.h"
 #include <string>
 
+// QuickFix
+#include <quickfix/Application.h>
+#include <quickfix/SessionSettings.h>
+#include <quickfix/FileStore.h>
+#include <quickfix/SocketInitiator.h>
+#include <quickfix/Log.h>
+
 namespace beast = boost::beast;
 namespace http = beast::http;
 namespace websocket = beast::websocket;
@@ -59,20 +66,13 @@ int main() {
         std::string api_key = config.as_object()["api_key"].as_string().c_str();
         std::string secret_key = config.as_object()["secret_key"].as_string().c_str();
 
+        // Authenticate with the API key and secret
         json::object auth_payload = {
             {"action", "auth"},
             {"key", api_key},
             {"secret", secret_key}
         };
 
-        /*
-        // Authenticate with the API key and secret
-        json::object auth_payload = {
-            {"action", "auth"},
-            {"key", "PKHZO6X7CE2ZKC5ZI2ZY"},
-            {"secret", "UcJwMeS0C3GTyJrP6OTDjSmOfIBXNsFDFefHVZLs"}
-        };
-        */
         ws.write(net::buffer(json::serialize(auth_payload)));
 
         // Buffer to hold incoming messages
@@ -84,6 +84,8 @@ int main() {
             {"trades", {"FAKEPACA"}}
         };
         ws.write(net::buffer(json::serialize(subscribe_payload)));
+
+        
 
         // Read messages in a loop and print them to stdout
         while (true) {
