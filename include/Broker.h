@@ -39,12 +39,13 @@ public:
     ~Broker();
     void Connect();
     int Authenticate();
+    int Subscribe();
 };
 
-Broker::Broker(boost::asio::io_context& ioc) : ioc_(ioc), ctx_(ssl::context::tlsv12_client), ws_(ioc,ctx)
+Broker::Broker(boost::asio::io_context& ioc) : ioc_(ioc), ctx_(ssl::context::tlsv12_client), ws_(ioc,ctx_)
 {
-        ctx.set_default_verify_paths();
-        websocket::stream<beast::ssl_stream<tcp::socket>> ws{ioc, ctx};
+        ctx_.set_default_verify_paths();
+        // websocket::stream<beast::ssl_stream<tcp::socket>> ws_{ioc, ctx_};
 }
 
 Broker::~Broker()
@@ -94,4 +95,28 @@ int Broker::Authenticate(){
     };
 
     ws_.write(net::buffer(json::serialize(auth_payload)));
+
+    return 0;
+}
+
+int Broker::Subscribe(){
+    // Subscribe to SPY trades
+    json::object subscribe_payload = {
+        {"action", "subscribe"},
+        {"trades", {"FAKEPACA"}}
+    };
+    ws_.write(net::buffer(json::serialize(subscribe_payload)));
+
+    // Buffer to hold incoming messages
+    beast::flat_buffer buffer;
+
+    // Read messages in a loop and print them to stdout
+    while (true) {
+        buffer.consume(buffer.size());
+        ws_.read(buffer);
+        std::cout << beast::make_printable(buffer.data()) << std::endl;
+    }
+
+    // Close the WebSocket connection
+    ws_.close(websocket::close_code::normal);
 }
