@@ -72,7 +72,7 @@ void Broker::Connect(){
 
     // Perform the WebSocket handshake
     ws_.handshake("stream.data.alpaca.markets", "/v2/test");
-        // ws.handshake("paper-api.alpaca.markets", "/stream");
+    // ws_.handshake("stream.data.alpaca.markets", "/v2/iex");
 }
 
 int Broker::Authenticate(){
@@ -103,7 +103,8 @@ int Broker::Subscribe(){
     // Subscribe to SPY trades
     json::object subscribe_payload = {
         {"action", "subscribe"},
-        {"trades", {"FAKEPACA"}}
+        {"quotes", {"FAKEPACA"}}
+        // {"quotes", {"AAPL"}}
     };
     ws_.write(net::buffer(json::serialize(subscribe_payload)));
 
