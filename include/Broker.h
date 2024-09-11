@@ -71,8 +71,8 @@ void Broker::Connect(){
     ws_.next_layer().handshake(ssl::stream_base::client);
 
     // Perform the WebSocket handshake
-    ws_.handshake("stream.data.alpaca.markets", "/v2/test");
-    // ws_.handshake("stream.data.alpaca.markets", "/v2/iex");
+    // ws_.handshake("stream.data.alpaca.markets", "/v2/test");
+    ws_.handshake("stream.data.alpaca.markets", "/v2/iex");
 }
 
 int Broker::Authenticate(){
@@ -103,8 +103,8 @@ int Broker::Subscribe(){
     // Subscribe to SPY trades
     json::object subscribe_payload = {
         {"action", "subscribe"},
-        {"quotes", {"FAKEPACA"}}
-        // {"quotes", {"AAPL"}}
+        //{"quotes", {"FAKEPACA"}}
+        {"quotes", {"AAPL"}}
     };
     ws_.write(net::buffer(json::serialize(subscribe_payload)));
 
