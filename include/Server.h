@@ -34,6 +34,7 @@ std::string Server::make_date_string(){
 }
 
 int Server::Start(){
+    std::cout << "Server Starting!" << std::endl;
     try
     {
         boost::asio::io_context io;

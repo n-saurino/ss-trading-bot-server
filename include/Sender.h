@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -23,7 +24,7 @@ private:
         oss << "Message: " << message_count_++;
 
         message_ = oss.str();
-
+        std::cout << message_ << std::endl;
         socket_.async_send_to(boost::asio::buffer(message_), endpoint_, 
         [this](boost::system::error_code ec, std::size_t /*lenght*/){ // lambda function!
             if (!ec && message_count_ < max_message_count){

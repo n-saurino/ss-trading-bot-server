@@ -5,10 +5,12 @@ services:
     build:
       context: ./.devcontainer
       dockerfile: Dockerfile
+    # network_mode: host
     volumes:
       - .:/workspace
     ports:
       - "13:13"  # Example port mapping, adjust as needed
+      - "30001:30001"
     networks:
       - app-network
     container_name: cpp_app
@@ -26,16 +28,16 @@ services:
   #   networks:
   #     - app-network
 
-  postgres:
-    image: postgres:13
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: tradingdb
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    networks:
-      - app-network
+  # postgres:
+    # image: postgres:13
+    # environment:
+      # POSTGRES_USER: user
+      # POSTGRES_PASSWORD: password
+      # POSTGRES_DB: tradingdb
+    # volumes:
+      # - pgdata:/var/lib/postgresql/data
+    # networks:
+      # - app-network
 
 networks:
   app-network:

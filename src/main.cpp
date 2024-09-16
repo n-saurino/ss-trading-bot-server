@@ -10,6 +10,7 @@
 #include <boost/json/src.hpp>  // To use Boost.JSON library
 #include "../include/Server.h"
 #include "../include/Broker.h"
+#include "../include/Sender.h"
 #include <string>
 
 // QuickFix
@@ -28,15 +29,19 @@ using tcp = net::ip::tcp;
 namespace json = boost::json;
 
 int main() {
+    
     try {
+        /*
         net::io_context ioc;
         Broker broker(ioc);
         broker.Connect();
         broker.Authenticate();
         broker.Subscribe();
+        */
+       Server server;
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
-    
+
     return 0;
 }
