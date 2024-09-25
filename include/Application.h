@@ -14,23 +14,49 @@
 class Application : FIX::Application, FIX::MessageCracker
 {
     // Application overloads
-    virtual ~Application() {};
     virtual void onCreate( const FIX::SessionID& ){}
     virtual void onLogon( const FIX::SessionID& );
     virtual void onLogout( const FIX::SessionID& );
     virtual void toAdmin( FIX::Message&, const FIX::SessionID& ){}
     virtual void toApp( FIX::Message&, const FIX::SessionID& )
-        throw( FIX::DoNotSend ){}
+        EXCEPT( FIX::DoNotSend ){}
     virtual void fromAdmin( const FIX::Message&, const FIX::SessionID& )
-        throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::RejectLogon ){}
+        EXCEPT( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::RejectLogon ){}
     virtual void fromApp( const FIX::Message&, const FIX::SessionID& )
-        throw( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType );
+        EXCEPT( FIX::FieldNotFound, FIX::IncorrectDataFormat, FIX::IncorrectTagValue, FIX::UnsupportedMessageType );
 
     void onMessage( const FIX42::MarketDataRequest&, const FIX::SessionID& );
     void onMessage( const FIX43::MarketDataRequest&, const FIX::SessionID& );
 
-    Broker broker_;
+    void queryEnterOrder();
+    void queryCancelOrder();
+    void queryReplaceOrder();
+    void queryMarketDataRequest();
 
-public:
-    const Broker& Broker() { return broker_; }
+    FIX42::NewOrderSingle queryNewOrderSingle42();
+    FIX42::OrderCancelRequest queryOrderCancelRequest42();
+    FIX42::OrderCancelReplaceRequest queryCancelReplaceRequest42();
+    
+
+    void queryHeader(FIX::Header& header);
+    char queryAction();
+    int queryVersion();
+    bool queryConfirm(const std::string& query);
+
+    FIX::SenderCompID querySenderCompID();
+    FIX::TargetCompID queryTargetCompID();
+    FIX::TargetSubID queryTargetSubID();
+    FIX::ClOrdID queryClOrdID();
+    FIX::OrigClOrdID queryOrigClOrdID();
+    FIX::Symbol querySymbol();
+    FIX::Side querySide();
+    FIX::OrderQty queryOrderQty();
+    FIX::OrdType queryOrdType();
+    FIX::Price queryPrice();
+    FIX::StopPx queryStopPx();
+    FIX::TimeInForce queryTimeInForce();
+
+    public:
+    void run();
+
 };
