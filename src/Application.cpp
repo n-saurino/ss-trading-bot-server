@@ -190,12 +190,28 @@ FIX42::NewOrderSingle Application::queryNewOrderSingle42(){
   return new_order_single;
 }
 
-FIX42::OrderCancelRequest queryOrderCancelRequest42(){
+FIX42::OrderCancelRequest Application::queryOrderCancelRequest42(){
   // To Do
+  FIX42::OrderCancelRequest order_cancel_request(queryOrigClOrdID(), queryClOrdID(), querySymbol(), querySide());
+  order_cancel_request.set(queryOrderQty());
+  queryHeader(order_cancel_request.getHeader());
+  return order_cancel_request;
 }
 
 FIX42::OrderCancelReplaceRequest Application::queryCancelReplaceRequest42(){
   // To Do
+  FIX42::OrderCancelReplaceRequest order_modify_request(queryOrigClOrdID(), queryClOrdID(), FIX::HandlInst( '1' ), 
+                                                        querySymbol(), querySide(), FIX::TransactTime(), queryOrdType());
+  if(queryConfirm("New price")){
+    order_modify_request.set(queryPrice());
+  }
+  
+  if(queryConfirm("New quantity")){
+    order_modify_request.set(queryOrderQty());
+  }
+  
+  queryHeader(order_modify_request.getHeader());
+  return order_modify_request;
 }
 
 char Application::queryAction(){
