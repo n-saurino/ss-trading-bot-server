@@ -8,6 +8,7 @@
 
 #include "quickfix/fix42/NewOrderSingle.h"
 #include "quickfix/fix42/OrderCancelRequest.h"
+#include "quickfix/fix42/OrderCancelReplaceRequest.h"
 #include "quickfix/fix42/MarketDataRequest.h"
 #include "quickfix/fix43/MarketDataRequest.h"
 

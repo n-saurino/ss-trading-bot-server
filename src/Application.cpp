@@ -192,7 +192,7 @@ FIX42::NewOrderSingle Application::queryNewOrderSingle42(){
 
 FIX42::OrderCancelRequest Application::queryOrderCancelRequest42(){
   // To Do
-  FIX42::OrderCancelRequest order_cancel_request(queryOrigClOrdID(), queryClOrdID(), querySymbol(), querySide());
+  FIX42::OrderCancelRequest order_cancel_request(queryOrigClOrdID(), queryClOrdID(), querySymbol(), querySide(), FIX::TransactTime());
   order_cancel_request.set(queryOrderQty());
   queryHeader(order_cancel_request.getHeader());
   return order_cancel_request;
@@ -209,7 +209,7 @@ FIX42::OrderCancelReplaceRequest Application::queryCancelReplaceRequest42(){
   if(queryConfirm("New quantity")){
     order_modify_request.set(queryOrderQty());
   }
-  
+
   queryHeader(order_modify_request.getHeader());
   return order_modify_request;
 }
