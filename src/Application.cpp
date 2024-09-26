@@ -95,19 +95,107 @@ void Application::run(){
 }
 
 void Application::queryEnterOrder(){
-
+  int version = queryVersion();
+  std::cout << std::endl << "New Order Request" << std::endl;
+  switch (version)
+  {
+  case 42:
+    /* code */
+    queryNewOrderSingle42();
+    break;
+  
+  default:
+    std::cerr << "FIX version not supported!" << std::endl;
+    break;
+  }
 }
 
 void Application::queryCancelOrder(){
+  std::cout << std::endl << "Cancel Order Request" << std::endl;
+  int version = queryVersion();
+  FIX::Message cancel;
+  switch (version)
+  {
+  case 42:
+    /* code */
+    cancel = queryOrderCancelRequest42();
+    break;
+  
+  default:
+    std::cerr << "FIX version not supported!" << std::endl;
+    break;
+  }
 
+  if(queryConfirm("Send cancel")){
+    FIX::Session::sendToTarget(cancel);
+  }
 }
 
 void Application::queryReplaceOrder(){
+  int version = queryVersion();
+  std::cout << std::endl << "Modify Order Request" << std::endl;
+  FIX::Message modify;
+  switch (version)
+  {
+  case 42:
+    /* code */
+    modify = queryCancelReplaceRequest42();
+    break;
+  
+  default:
+    std::cerr << "FIX version not supported!" << std::endl;
+    break;
+  }
+
+  if(queryConfirm("Send replace")){
+    FIX::Session::sendToTarget(modify);
+  }
 
 }
 
 void Application::queryMarketDataRequest(){
+  // To Do
+  int version = queryVersion();
+  FIX::Message market_data;
+  switch (version)
+  {
+  case 42:
+    std::cerr << "Market Data Request not supported yet!" << std::endl;
+    // market_data = queryMarketDataRequest();
+    break;
+  
+  default:
+    std::cerr << "FIX version not supported!" << std::endl;
+    break;
+  }
+}
 
+FIX42::NewOrderSingle Application::queryNewOrderSingle42(){
+  // To Do
+  FIX::OrdType order_type;
+  FIX42::NewOrderSingle new_order_single(queryClOrdID(), FIX::HandlInst( '1' ), querySymbol(), querySide(),
+                                         FIX::TransactTime(), order_type = queryOrdType());
+
+  new_order_single.set(queryOrderQty());
+  new_order_single.set(queryTimeInForce());
+
+  if(order_type == FIX::OrdType_LIMIT || FIX::OrdType_STOP_LIMIT){
+    new_order_single.set(queryPrice());
+  }
+
+  if(order_type == FIX::OrdType_STOP || order_type == FIX::OrdType_STOP_LIMIT){
+    new_order_single.set(queryStopPx());
+  }
+  queryHeader(new_order_single.getHeader());
+  return new_order_single;
+}
+
+FIX42::OrderCancelRequest queryOrderCancelRequest42(){
+  // To Do
+}
+
+FIX42::OrderCancelReplaceRequest Application::queryCancelReplaceRequest42(){
+  // To Do
 }
 
 char Application::queryAction(){

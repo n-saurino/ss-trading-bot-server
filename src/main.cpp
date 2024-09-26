@@ -52,10 +52,14 @@ int main() {
         Application application;
         FIX::FileStoreFactory storeFactory(settings);
         FIX::FileLogFactory logFactory(settings);
-        FIX::SocketAcceptor acceptor(application, storeFactory, settings, logFactory /*optional*/);
-        acceptor.start();
-        // while( condition == true ) { do something; }
-        acceptor.stop();
+        std::unique_ptr<FIX::Initiator> pinitiator;
+    
+        pinitiator = std::unique_ptr<FIX::Initiator>( 
+        new FIX::SocketInitiator(application, storeFactory, settings, logFactory));
+
+        pinitiator.start();
+        application.run();
+        pinitiator.stop();
         return 0;
 
     } catch (const std::exception& e) {
