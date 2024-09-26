@@ -29,14 +29,14 @@ class Application : FIX::Application, FIX::MessageCracker
     void onMessage( const FIX42::MarketDataRequest&, const FIX::SessionID& );
     void onMessage( const FIX43::MarketDataRequest&, const FIX::SessionID& );
 
-    void queryEnterOrder();
-    void queryCancelOrder();
-    void queryReplaceOrder();
-    void queryMarketDataRequest();
+    void queryEnterOrder(); // done
+    void queryCancelOrder(); // done
+    void queryReplaceOrder(); // done
+    void queryMarketDataRequest(); // to do
 
-    FIX42::NewOrderSingle queryNewOrderSingle42();
-    FIX42::OrderCancelRequest queryOrderCancelRequest42();
-    FIX42::OrderCancelReplaceRequest queryCancelReplaceRequest42();
+    FIX42::NewOrderSingle queryNewOrderSingle42(); // done
+    FIX42::OrderCancelRequest queryOrderCancelRequest42(); // done
+    FIX42::OrderCancelReplaceRequest queryCancelReplaceRequest42(); // done
     
 
     void queryHeader(FIX::Header& header);

@@ -214,6 +214,11 @@ FIX42::OrderCancelReplaceRequest Application::queryCancelReplaceRequest42(){
   return order_modify_request;
 }
 
+
+void queryHeader(FIX::Header& header){
+  // To do
+}
+
 char Application::queryAction(){
     char action;
     std::cout << "1) New Order,\n2) Cancel Order,\n3) Modify Order,\n4)Market Data Request\n5) Quit,\nAction: ";
@@ -225,3 +230,12 @@ char Application::queryAction(){
     }
     return action;
 }
+
+int queryVersion(){
+  // To do
+}
+
+bool queryConfirm(const std::string& query){
+  // To do
+}
+
