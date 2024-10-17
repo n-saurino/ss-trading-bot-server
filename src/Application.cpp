@@ -31,7 +31,8 @@ void Application::toApp( FIX::Message& message, const FIX::SessionID& sessionID)
   std::cout << std::endl << "OUT: " << message << std::endl;
 }
 
-void Application::onMessage( const FIX42::MarketDataRequest& message, const FIX::SessionID& )
+void Application::onMessage( const FIX42::MarketDataRequest& message, 
+                             const FIX::SessionID& )
 {
   FIX::MDReqID mdReqID;
   FIX::SubscriptionRequestType subscriptionRequestType;
@@ -62,7 +63,6 @@ void Application::run(){
       switch (query_action)
       {
       case '1':
-        /* code */
         // new order
         queryEnterOrder();
         break;
@@ -173,8 +173,9 @@ void Application::queryMarketDataRequest(){
 FIX42::NewOrderSingle Application::queryNewOrderSingle42(){
   // To Do
   FIX::OrdType order_type;
-  FIX42::NewOrderSingle new_order_single(queryClOrdID(), FIX::HandlInst( '1' ), querySymbol(), querySide(),
-                                         FIX::TransactTime(), order_type = queryOrdType());
+  FIX42::NewOrderSingle new_order_single(queryClOrdID(), FIX::HandlInst( '1' ), 
+    querySymbol(), querySide(),
+    FIX::TransactTime(), order_type = queryOrdType());
 
   new_order_single.set(queryOrderQty());
   new_order_single.set(queryTimeInForce());
@@ -192,7 +193,8 @@ FIX42::NewOrderSingle Application::queryNewOrderSingle42(){
 
 FIX42::OrderCancelRequest Application::queryOrderCancelRequest42(){
   // To Do
-  FIX42::OrderCancelRequest order_cancel_request(queryOrigClOrdID(), queryClOrdID(), querySymbol(), querySide(), FIX::TransactTime());
+  FIX42::OrderCancelRequest order_cancel_request(queryOrigClOrdID(), 
+    queryClOrdID(), querySymbol(), querySide(), FIX::TransactTime());
   order_cancel_request.set(queryOrderQty());
   queryHeader(order_cancel_request.getHeader());
   return order_cancel_request;
@@ -200,8 +202,10 @@ FIX42::OrderCancelRequest Application::queryOrderCancelRequest42(){
 
 FIX42::OrderCancelReplaceRequest Application::queryCancelReplaceRequest42(){
   // To Do
-  FIX42::OrderCancelReplaceRequest order_modify_request(queryOrigClOrdID(), queryClOrdID(), FIX::HandlInst( '1' ), 
-                                                        querySymbol(), querySide(), FIX::TransactTime(), queryOrdType());
+  FIX42::OrderCancelReplaceRequest order_modify_request(queryOrigClOrdID(), 
+    queryClOrdID(), FIX::HandlInst( '1' ), 
+    querySymbol(), querySide(), FIX::TransactTime(), queryOrdType());
+
   if(queryConfirm("New price")){
     order_modify_request.set(queryPrice());
   }
@@ -217,11 +221,13 @@ FIX42::OrderCancelReplaceRequest Application::queryCancelReplaceRequest42(){
 
 void queryHeader(FIX::Header& header){
   // To do
+
 }
 
 char Application::queryAction(){
     char action;
-    std::cout << "1) New Order,\n2) Cancel Order,\n3) Modify Order,\n4)Market Data Request\n5) Quit,\nAction: ";
+    std::cout << "1) New Order,\n2) Cancel Order,\n3) Modify Order,\n\
+    4)Market Data Request\n5) Quit,\nAction: ";
     std::cin >> action;
 
     switch(action){
